@@ -1,0 +1,9 @@
+@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700';
+
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+@import 'select2/dist/css/select2.min.css';
+@import 'icheck-bootstrap/icheck-bootstrap.min.css';
+@import 'toastr/build/toastr.min.css';
+
+@import 'admin-lte/dist/css/adminlte.min.css';
