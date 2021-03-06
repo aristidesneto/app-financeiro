@@ -29,96 +29,27 @@
                         <h3 class="card-title">Lançamentos de despesas e receitas</h3>
                     </div>
 
-                    <form class="form-horizontal" method="post" action="{{ route('entry.store') }}" id="submitForm">
-                        @csrf
-                        <div class="card-body">
-                            <!-- radio -->
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Tipo</label>
-                                <div class="col-sm-10">
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="radioPrimary1" value="expense" name="type" checked>
-                                        <label for="radioPrimary1">Despesa
-                                        </label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="radioPrimary2" value="income" name="type">
-                                        <label for="radioPrimary2">Receita
-                                        </label>
-                                    </div>
-                                </div>
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="custom-content-below-expense-tab" data-toggle="pill" href="#custom-content-below-expense" role="tab" aria-controls="custom-content-below-expense" aria-selected="true">Despesas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-content-below-income-tab" data-toggle="pill" href="#custom-content-below-income" role="tab" aria-controls="custom-content-below-income" aria-selected="false">Receitas</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="custom-content-below-tabContent">
+                            <div class="tab-pane fade show active" id="custom-content-below-expense" role="tabpanel" aria-labelledby="custom-content-below-expense-tab">
+                                @include('entries.expense')
                             </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Categoria</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control select2" name="category_id" style="width: 100%;" id="listCategory" required>
-                                    </select>
-                                </div>
+                            <div class="tab-pane fade" id="custom-content-below-income" role="tabpanel" aria-labelledby="custom-content-below-income-tab">
+                                @include('entries.income')
                             </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Descrição</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="title" class="form-control" placeholder="Descrição" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Valor</label>
-                                <div class="col-sm-4">
-                                    <input type="text" name="amount" class="form-control money" required>
-                                </div>
-
-                                <label class="col-sm-2 col-form-label">Data de Vencimento</label>
-                                <div class="col-sm-4">
-                                    <input type="text" name="due_date" class="form-control datemask">
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-10">
-                                    <div class="icheck-primary d-inline">
-                                        <input type="checkbox" name="is_recurring" value="1" checked id="checkboxPrimary1" onclick="toggle_visibility('paymentDiv');" >
-                                        <label for="checkboxPrimary1">
-                                            Lançamento recorrente
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="paymentDiv" style="display: none">
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">Forma pagamento</label>
-                                    <div class="col-sm-5">
-                                        <select class="form-control select2" name="type_payment" style="width: 100%;" id="choosePayment">
-                                            <option>Selecionar Pagamento</option>
-                                            <option value="entries">Lançamento</option>
-                                            <option value="credit-card">Cartão de crédito</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <select class="form-control select2" name="payment" style="width: 100%;" disabled id="selectPayment">
-                                            <option>Selecione a forma de pagamento</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">Num Parcelas</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" name="parcel" value="1" class="form-control only-numbers" minlength="1" maxlength="3" id="parcel" disabled>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-info">Cadastrar</button>
-                        </div>
-                    </form>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -1,103 +1,108 @@
-// const { default: axios } = require("axios");
+const { getCreditCards, getBankAccounts } = require("./functions")
 
-import { toggle_visibility } from "./functions";
-
-
-if ($('#listCategory').length == 1) {
-
-    axios.get('/api/categories', {params: {type: 'expense'}})
-    .then(response => {
-        let data = response.data
-        let list = '<option>Selecione</option>'
-
+if ($('#selectCreditCard').length == 1) {
+    var listCreditCards = getCreditCards()
+    listCreditCards.then(data => {
+        let list = '<option value=""></option>'
         data.forEach(row => {
             list += `<option value='${row.id}'>${row.name}</option>`
         });
 
-        $('#listCategory').html(list)
+        $('#selectCreditCard').prop('disabled', false).html(list)
     })
-    .catch(error => console.log(error))
 }
 
-var dataCreditCard = ''
-var typePayment = ''
+if ($('#selectBankAccount').length == 1) {
+    var listBankAccounts = getBankAccounts()
+    listBankAccounts.then(data => {
+        let list = '<option value=""></option>'
+        data.forEach(row => {
+            list += `<option value='${row.id}'>${row.name}</option>`
+        });
 
-$('#choosePayment').on('change', function () {
-    typePayment = $('#choosePayment').val()
+        $('#selectBankAccount').prop('disabled', false).html(list)
+    })
+}
 
-    if (typePayment === 'entries') {
-        $('#selectPayment').prop('disabled', true)
-        $('#parcel').prop('disabled', true)
-        $('.datemask').prop('disabled', false).val($('.datemask').val())
+if ($('#categoriesExpense').length == 1) {
+    axios.get('/api/categories')
+    .then(response => {
+        let data = response.data
 
-        let option = '<option>Selecione a forma de pagamento</option>'
-        $('#selectPayment').prop('disabled', true).html(option)
+        let expenseList = data.filter((item) => item.type === 'expense')
+        let incomeList = data.filter((item) => item.type === 'income')
 
-        // axios.get('/api/bank-account')
-        // .then(response => {
-        //     let data = response.data
-        //     let list = '<option>Selecione</option>'
+        let expense = '<option value=""></option>'
+        let income = '<option value=""></option>'
 
-        //     data.forEach(row => {
-        //         list += `<option value='${row.id}'>${row.name}</option>`
-        //     });
+        expenseList.forEach(row => {
+            expense += `<option value='${row.id}'>${row.name}</option>`
+        });
 
-        //     $('#selectPayment').prop('disabled', false).html(list)
-        //     $('.datemask').prop('disabled', false).val('')
-        // })
-        // .catch(error => console.log(error))
-    } else if (typePayment === 'credit-card') {
+        incomeList.forEach(row => {
+            income += `<option value='${row.id}'>${row.name}</option>`
+        });
 
-        axios.get('/api/credit-card')
-        .then(response => {
-            dataCreditCard = response.data
-            let list = '<option>Selecione</option>'
+        $('#categoriesExpense').html(expense)
+        $('#categoriesIncome').html(income)
+    })
+    .catch(error => console.log(error.response.data.errors))
+}
 
-            dataCreditCard.forEach(row => {
-                list += `<option value='${row.id}'>${row.name}</option>`
-            });
+$('#checkPaymentCreditCard').on('change', function () {
+    $("#selectCreditCard").val('').trigger('change')
+    document.getElementById('checkPaymentCreditCard').checked
+        ? $('#checkIsRecurring').prop('disabled', true)
+        : $('#checkIsRecurring').prop('disabled', false)
 
-            $('#selectPayment').prop('disabled', false).html(list)
-            $('#parcel').prop('disabled', false)
+})
+
+$('#checkIsRecurring').on('change', function () {
+    $("#selectBankAccount").val('').trigger('change')
+    !document.getElementById('checkIsRecurring').checked
+        ? $('#checkPaymentCreditCard').prop('disabled', true)
+        : $('#checkPaymentCreditCard').prop('disabled', false)
+
+})
+
+$('#selectCreditCard').on('change', function () {
+    let value = $('#selectCreditCard').val()
+    if (value) {
+        listCreditCards.then(data => {
+            let creditCard = data.find(item => item.id == value)
+            let now = new Date()
+            let day = ("0" + (creditCard.due_date)).slice(-2)
+            let month = ("0" + (now.getMonth() + 1)).slice(-2)
+            $('#due_date').val(`${day}/${month}/${now.getFullYear()}`)
         })
-        .catch(error => console.log(error))
-
-    } else {
-        let option = '<option>Selecione a forma de pagamento</option>'
-        $('#selectPayment').prop('disabled', true).html(option)
     }
 })
 
-$('#selectPayment').on('change', function () {
-    if (typePayment === 'credit-card') {
-        let value = $('#selectPayment').val()
-        let creditCard = dataCreditCard.find(item => item.id == value)
-        let now = new Date()
-
-        let dueDate = `${creditCard.due_date}/${now.getMonth() + 1}/${now.getFullYear()}`
-
-        $('.datemask').prop('disabled', true).val(dueDate)
-    }
-})
-
-
-
-$('#submitForm').on('submit', function (e) {
+$('.submitForm').on('submit', function (e) {
     e.preventDefault()
     let action = $(this).attr('action')
     let data = new FormData(this)
 
     axios.post(action, data)
-    .then(response => {
-        let data = response.data
-        if (data.status === 'success') {
-            toastr.success(data.message)
-            $(this).trigger("reset");
+        .then(response => {
+            let data = response.data
+            if (data.status === 'success') {
+                toastr.success(data.message)
+                this.reset()
 
-            $('.select2').trigger('change')
-        } else {
-            toastr.error(data.message)
-        }
-    })
-    .catch(error => console.log(error))
+                $('.select2').trigger('change')
+
+                document.getElementById('divSelectBankAccount').style.display = 'none'
+                document.getElementById('divSelectCreditCard').style.display = 'none'
+
+                disabledElement('checkIsRecurring', false)
+                disabledElement('checkPaymentCreditCard')
+            } else {
+                toastr.error(data.message)
+            }
+        })
+        .catch(error => console.log(error.response.data.errors))
 })
+
+
+

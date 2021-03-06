@@ -17,7 +17,6 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
-            $table->string('description');
             $table->string('color');
             $table->enum('type', ['income', 'expense'])->default('income');
             $table->timestamps();

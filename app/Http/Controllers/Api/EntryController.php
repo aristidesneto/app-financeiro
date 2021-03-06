@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\EntryService;
 use App\Http\Controllers\Controller;
@@ -13,22 +14,23 @@ class EntryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $type = $request->type === 'expense' ? 'expense' : 'income';
+
         $params = [
-            'type' => 'expense',
+            'type' => $type,
             'period' => [
-                'start_month' => '02',
-                'start_year' => '2021',
-                'end_month' => null,
-                'end_year' => null
+                'month' => explode('/', $request->month)[1],
+                'year' => explode('/', $request->month)[0]
             ]
         ];
         $entries = (new EntryService())->getEntries($params);
 
         return response()->json([
             'data' => $entries,
-            'total' => number_format($entries->sum('amount'), 2, ',', '.')
+            'totalExpense' => number_format($entries->where('credit_card_id', null)->sum('amount'), 2, ',', '.'),
+            'totalCard' => number_format($entries->where('credit_card_id', !null)->sum('amount'), 2, ',', '.')
         ]);
     }
 

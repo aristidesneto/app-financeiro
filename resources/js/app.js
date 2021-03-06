@@ -7,33 +7,42 @@ require('./pages')
 
 // Select 2
 require('select2/dist/js/select2.full.min.js');
-$('.select2').select2()
+$('.select2').select2({
+    placeholder: "Selecione uma opção",
+    allowClear: true
+})
 
 // Toastr
 window.toastr = require('toastr/build/toastr.min.js');
 
 
-// Input Mask
-require('moment/dist/moment.js');
-// require('inputmask/dist/jquery.inputmask.min.js');
+// Jquery Mask
 require('jquery-mask-plugin');
 
-// Data dd/mm/yyyy
-// $('.datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-
-$(".datemask").mask('00/00/0000')
-$(".only-numbers").mask('0#')
+$(".datemask").mask('00/00/0000');
+$(".only-numbers").mask('0#');
 $('.money').mask('#.##0,00', {reverse: true});
 
-// Valor monetário
-// $("#money").inputmask('decimal', {
-//     'alias': 'numeric',
-//     'groupSeparator': '.',
-//     'autoGroup': true,
-//     'digits': 2,
-//     'radixPoint': ",",
-//     'digitsOptional': false,
-//     'allowMinus': false,
-//     'prefix': 'R$ ',
-//     'placeholder': '0,00'
-// });
+// Daterange picker
+require('daterangepicker/daterangepicker.js');
+
+require('bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
+require('bootstrap-datepicker');
+$('.daterangepicker').daterangepicker();
+
+$('.datepicker').datepicker({
+    autoclose: true,
+    format: 'dd/mm/yyyy',
+    language: 'pt-BR',
+    todayHighlight: true,
+});
+
+$('.datepicker-month').datepicker({
+    autoclose: true,
+    format: 'mm/yyyy',
+    language: 'pt-BR',
+    startView: 'months',
+    minViewMode: 'months',
+    todayHighlight: true
+});
+

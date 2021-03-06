@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Entry;
 use App\Services\EntryService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class EntryController extends Controller
@@ -15,7 +16,12 @@ class EntryController extends Controller
      */
     public function index()
     {
-        return view('expenses.index');
+        $now = Carbon::now();
+
+        return view('expenses.index', [
+            'year' => $now->year,
+            'currentMonth' => $now->format('Y/m')
+        ]);
     }
 
     /**

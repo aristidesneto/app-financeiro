@@ -22,11 +22,12 @@ class CreateEntriesTable extends Migration
             $table->enum('type', ['income', 'expense'])->default('expense');
             $table->string('title')->nullable()->comment('Título do lançamento');
             $table->decimal('amount', 10, 2);
-            $table->integer('parcel')->comment('Número da parcela');
-            $table->date('due_date')->comment('Data de vencimento');
+            $table->integer('parcel')->nullable()->comment('Número da parcela');
+            $table->integer('total_parcel')->nullable()->comment('Número total da parcela');
+            $table->date('due_date')->nullable()->comment('Data de vencimento');
             $table->date('payday')->nullable()->comment('Data de pagamento');
             $table->boolean('is_recurring')->default(false)->comment('Despesa recorrente');
-            $table->timestamp('start_date')->nullable()->comment('Data inicial da despesa');
+            $table->date('start_date')->nullable()->comment('Data inicial da despesa/Referência receita');
             $table->integer('sequence')->nullable()->comment('Agrupamento de parcelas recorrentes');
             $table->timestamps();
             $table->softDeletes();

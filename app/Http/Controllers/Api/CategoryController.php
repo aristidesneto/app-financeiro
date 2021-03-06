@@ -15,9 +15,12 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $type = $request->type === 'expense' ? 'expense' : 'income';
+        if ($request->type) {
+            $type = $request->type === 'expense' ? 'expense' : 'income';
+            return Category::where('type', $type)->orderBy('name')->get();
+        }
 
-        return Category::where('type', $type)->orderBy('name')->get();
+        return Category::orderBy('name')->get();
     }
 
     /**
