@@ -31,10 +31,15 @@ host('production')
 
 
 // Tasks
-
-task('build', function () {
-    run('cd {{release_path}} && build');
+task('deploy:npm_prod', function () {
+    if (has('previous_release')) {
+        run('cp -R {{previous_release}}/node_modules {{release_path}}/node_modules');
+    }
+    run('cd {{release_path}} && npm install');
+    run('cd {{release_path}} && npm run prod');
 });
+
+after('deploy:vendors', 'deploy:npm_prod');
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
