@@ -9,7 +9,8 @@ class EntryResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -29,7 +30,7 @@ class EntryResource extends JsonResource
             'user' => new UserResource($this->user),
             'bank_account' => new BankAccountResource($this->bank_account),
             'category' => new CategoryResource($this->category),
-            'credit_card' => new CreditCardResource($this->credit_card)
+            'credit_card' => new CreditCardResource($this->credit_card),
         ];
     }
 }

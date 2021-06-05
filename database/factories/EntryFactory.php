@@ -25,7 +25,7 @@ class EntryFactory extends Factory
     {
         $types = ['expense', 'income'];
 
-        $due_date = Carbon::now()->addDays(random_int(1,30));
+        $due_date = Carbon::now()->addDays(random_int(1, 30));
 
         return [
             'user_id' => '1',

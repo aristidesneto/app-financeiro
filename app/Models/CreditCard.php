@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class CreditCard extends Model
 {
-    use HasFactory, TenantTrait;
+    use HasFactory;
+    use TenantTrait;
 
     protected $fillable = [
-        'user_id', 'name', 'number', 'best_date', 'due_date', 'limit'
+        'user_id', 'name', 'number', 'best_date', 'due_date', 'limit',
     ];
 
     public function setLimitAttribute($value)

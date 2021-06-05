@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    use HasFactory, TenantTrait;
+    use HasFactory;
+    use TenantTrait;
 
     protected $fillable = [
-        'user_id', 'name', 'description', 'color'
+        'user_id', 'name', 'description', 'color',
     ];
 
     public function entries()

@@ -2,24 +2,38 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use App\Tenant\Traits\TenantTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Entry extends Model
 {
-    use HasFactory, TenantTrait;
+    use HasFactory;
+    use TenantTrait;
 
     protected $fillable = [
-        'user_id', 'category_id', 'credit_card_id', 'bank_account_id', 'type', 'title', 'amount', 'parcel', 'total_parcel', 'due_date', 'payday', 'is_recurring', 'start_date', 'sequence'
+        'user_id',
+        'category_id',
+        'credit_card_id',
+        'bank_account_id',
+        'type',
+        'title',
+        'amount',
+        'parcel',
+        'total_parcel',
+        'due_date',
+        'payday',
+        'is_recurring',
+        'start_date',
+        'sequence',
     ];
 
     protected $dates = [
-        'due_date', 'payday'
+        'due_date',
+        'payday',
     ];
 
-    public function bank_account()
+    public function bankAccount()
     {
         return $this->belongsTo(BankAccount::class);
     }
@@ -29,7 +43,7 @@ class Entry extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function credit_card()
+    public function creditCard()
     {
         return $this->belongsTo(CreditCard::class);
     }

@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Http\Resources\EntryResource;
-use Carbon\Carbon;
 use App\Models\Entry;
+use Carbon\Carbon;
 
 class EntryService implements ServiceInterface
 {
-
-    public function store(array $data) : bool
+    public function store(array $data): bool
     {
-        if ($data['type'] === 'expense') {
+        if ('expense' === $data['type']) {
             return $this->saveExpense($data);
         }
 
@@ -22,7 +21,7 @@ class EntryService implements ServiceInterface
 
     public function entries(array $request)
     {
-        $type = $request['type'] === 'expense' ? 'expense' : 'income';
+        $type = 'expense' === $request['type'] ? 'expense' : 'income';
         $date = Carbon::createFromFormat('Y-m', $request['month'])->format('Y-m');
 
         $year = explode('-', $date)[0];
@@ -45,18 +44,18 @@ class EntryService implements ServiceInterface
 
     protected function saveExpense(array $data): bool
     {
-        $data['is_recurring'] = isset($data['is_recurring']) == '1' ? true : false;
+        $data['is_recurring'] = '1' == isset($data['is_recurring']) ? true : false;
         $due_date = $data['due_date'] = Carbon::createFromTimeString($data['due_date']);
 
         // Recorrente
-        if ($data['is_recurring'] === true) {
+        if (true === $data['is_recurring']) {
             $sequence = $this->getSequence();
-            $data['sequence'] = $sequence === null ? 1 : $sequence + 1;
+            $data['sequence'] = null === $sequence ? 1 : $sequence + 1;
             $data['bank_account_id'] = null;
             $data['credit_card_id'] = null;
             $data['parcel'] = 0;
 
-            for ($i = 1; $i <= 120; $i++) { // 10 anos
+            for ($i = 1; $i <= 120; ++$i) { // 10 anos
                 Entry::create($data);
                 $data['due_date'] = $due_date->copy()->addMonthNoOverflow($i);
             }
@@ -67,8 +66,8 @@ class EntryService implements ServiceInterface
         // dd($data);
 
         // Cartão de crédito
-        if (! is_null($data['credit_card_id'])) {
-            $totalParcel = ($data['parcel'] === null || $data['parcel'] === '0') ? '1' : $data['parcel'];
+        if (!is_null($data['credit_card_id'])) {
+            $totalParcel = (null === $data['parcel'] || '0' === $data['parcel']) ? '1' : $data['parcel'];
 
             $amountParcel = round($data['amount'] / $totalParcel, 2);
             $difference = round(($amountParcel * $totalParcel) - $data['amount'], 2);
@@ -78,7 +77,7 @@ class EntryService implements ServiceInterface
             $data['total_parcel'] = $totalParcel;
             $data['bank_account_id'] = null;
 
-            for ($i = 1; $i <= $totalParcel; $i++) {
+            for ($i = 1; $i <= $totalParcel; ++$i) {
                 $data['parcel'] = $i;
                 $data['amount'] = $i === (int) $totalParcel ? $amountParcel - $difference : $amountParcel;
                 // dd($data);
@@ -100,17 +99,15 @@ class EntryService implements ServiceInterface
         return true;
     }
 
-    protected function saveIncome(array $data) : bool
+    protected function saveIncome(array $data): bool
     {
-        $data['is_recurring'] = isset($data['is_recurring']) == '1' ? true : false;
+        $data['is_recurring'] = '1' == isset($data['is_recurring']) ? true : false;
         $data['amount'] = formatMoney2Db($data['amount']);
         $start_date = $data['start_date'] = Carbon::createFromFormat('m/Y', $data['start_date'])->firstOfMonth();
         $data['parcel'] = 0;
 
-        if ($data['is_recurring'] === true) {
-
-            for ($i = 1; $i <= 120; $i++) { // 10 anos
-
+        if (true === $data['is_recurring']) {
+            for ($i = 1; $i <= 120; ++$i) { // 10 anos
                 Entry::create($data);
 
                 $data['start_date'] = $start_date->copy()->addMonthNoOverflow($i);
@@ -123,5 +120,4 @@ class EntryService implements ServiceInterface
 
         return true;
     }
-
 }

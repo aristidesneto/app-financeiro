@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class BankAccount extends Model
 {
-    use HasFactory, TenantTrait;
+    use HasFactory;
+    use TenantTrait;
 }

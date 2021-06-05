@@ -9,7 +9,8 @@ class CreditCardResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -21,7 +22,7 @@ class CreditCardResource extends JsonResource
             'best_date' => $this->best_date,
             'due_date' => $this->due_date,
             'limit' => $this->limit,
-            'status' => $this->status
+            'status' => $this->status,
         ];
     }
 }

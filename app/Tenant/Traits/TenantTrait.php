@@ -10,6 +10,6 @@ trait TenantTrait
     {
         parent::boot();
 
-        static::addGlobalScope(new TenantScope);
+        static::addGlobalScope(new TenantScope());
     }
 }

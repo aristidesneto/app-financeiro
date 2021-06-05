@@ -1,48 +1,32 @@
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * includes Vue and other libraries. It is a great starting point when
+ * building robust, powerful web applications using Vue and Laravel.
+ */
+
 require('./bootstrap');
 
-// Admin LTE
-require('admin-lte/dist/js/adminlte.min.js');
-require('bootstrap-switch/dist/js/bootstrap-switch.min.js');
-require('./pages')
+window.Vue = require('vue').default;
 
-// Select 2
-require('select2/dist/js/select2.full.min.js');
-$('.select2').select2({
-    placeholder: "Selecione uma opção",
-    allowClear: true
-})
+/**
+ * The following block of code may be used to automatically register your
+ * Vue components. It will recursively scan this directory for the Vue
+ * components and automatically register them with their "basename".
+ *
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ */
 
-// Toastr
-window.toastr = require('toastr/build/toastr.min.js');
+// const files = require.context('./', true, /\.vue$/i)
+// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
-// Jquery Mask
-require('jquery-mask-plugin');
+/**
+ * Next, we will create a fresh Vue application instance and attach it to
+ * the page. Then, you may begin adding components to this application
+ * or customize the JavaScript scaffolding to fit your unique needs.
+ */
 
-$(".datemask").mask('00/00/0000');
-$(".only-numbers").mask('0#');
-$('.money').mask('#.##0,00', {reverse: true});
-
-// Daterange picker
-require('daterangepicker/daterangepicker.js');
-
-require('bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
-require('bootstrap-datepicker');
-$('.daterangepicker').daterangepicker();
-
-$('.datepicker').datepicker({
-    autoclose: true,
-    format: 'dd/mm/yyyy',
-    language: 'pt-BR',
-    todayHighlight: true,
+const app = new Vue({
+    el: '#app',
 });
-
-$('.datepicker-month').datepicker({
-    autoclose: true,
-    format: 'mm/yyyy',
-    language: 'pt-BR',
-    startView: 'months',
-    minViewMode: 'months',
-    todayHighlight: true
-});
-

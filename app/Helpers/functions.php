@@ -1,8 +1,9 @@
 <?php
 
-if (! function_exists('formatMoney2Db')) {
-    function formatMoney2Db($value) {
-        if (explode(' ', $value)[0] === 'R$') {
+if (!function_exists('formatMoney2Db')) {
+    function formatMoney2Db($value)
+    {
+        if ('R$' === explode(' ', $value)[0]) {
             return trim(str_replace(',', '.', str_replace('.', '', explode(' ', $value)[1])));
         }
 
@@ -10,8 +11,9 @@ if (! function_exists('formatMoney2Db')) {
     }
 }
 
-if (! function_exists('formatMoney')) {
-    function formatMoney($value, $prefix = false) {
+if (!function_exists('formatMoney')) {
+    function formatMoney($value, $prefix = false)
+    {
         if ($prefix) {
             return 'R$ ' . number_format($value, 2, ',', '.');
         }
@@ -20,8 +22,9 @@ if (! function_exists('formatMoney')) {
     }
 }
 
-if (! function_exists('shortMonths')) {
-    function shortMonths(int $value) {
+if (!function_exists('shortMonths')) {
+    function shortMonths(int $value)
+    {
         if ($value) {
             $months = [
                 1 => 'Jan',
@@ -43,8 +46,9 @@ if (! function_exists('shortMonths')) {
     }
 }
 
-if (! function_exists('fullMonths')) {
-    function fullMonths(int $value) {
+if (!function_exists('fullMonths')) {
+    function fullMonths(int $value)
+    {
         if ($value) {
             $months = [
                 1 => 'Janeiro',

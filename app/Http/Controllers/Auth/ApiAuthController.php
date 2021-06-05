@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ApiAuthController extends Controller
 {
@@ -17,16 +17,16 @@ class ApiAuthController extends Controller
     {
         $user = User::where('email', auth()->user()->email)->first();
 
-        if (! $user) {
+        if (!$user) {
             return response()->json(['message' => 'Usuário não autenticado'], 401);
         }
 
         return response()->json([
-            'user' => new UserResource($user)
+            'user' => new UserResource($user),
         ], 200);
     }
 
-    public function register (Request $request)
+    public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -36,7 +36,7 @@ class ApiAuthController extends Controller
 
         if ($validator->fails()) {
             return response([
-                'errors' => $validator->errors()->all()
+                'errors' => $validator->errors()->all(),
             ], 422);
         }
 
@@ -46,11 +46,11 @@ class ApiAuthController extends Controller
         $token = $user->createToken('Laravel Password Grant Client')->accessToken;
 
         return response()->json([
-            'token' => $token
+            'token' => $token,
         ], 200);
     }
 
-    public function login (Request $request)
+    public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
@@ -59,7 +59,7 @@ class ApiAuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'errors' => $validator->errors()->all()
+                'errors' => $validator->errors()->all(),
             ], 422);
         }
 
@@ -93,13 +93,13 @@ class ApiAuthController extends Controller
         ], 401);
     }
 
-    public function logout (Request $request)
+    public function logout(Request $request)
     {
         $request->user()->token()->revoke();
         $cookie = Cookie::forget('_token');
 
         return response()->json([
-            'message' => 'Logout realizado com sucesso'
+            'message' => 'Logout realizado com sucesso',
         ], 200)->withCookie($cookie);
     }
 

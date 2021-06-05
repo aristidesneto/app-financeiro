@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Models\User;
-use App\Models\Entry;
 use App\Models\CreditCard;
-use App\Observers\UserObserver;
-use App\Observers\EntryObserver;
+use App\Models\Entry;
+use App\Models\User;
 use App\Observers\CreditCardObserver;
+use App\Observers\EntryObserver;
+use App\Observers\UserObserver;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,7 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 
     /**
@@ -30,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (! $this->app->runningInConsole()) {
+        if (!$this->app->runningInConsole()) {
             Entry::observe(EntryObserver::class);
             CreditCard::observe(CreditCardObserver::class);
             User::observe(UserObserver::class);

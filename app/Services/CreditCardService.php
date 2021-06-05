@@ -1,23 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\CreditCard;
+use Illuminate\Database\Eloquent\Collection;
 
 class CreditCardService implements ServiceInterface
 {
-    public function list()
+    public function list(): Collection
     {
         return CreditCard::orderBy('name')->get();
     }
-    public function store($data) : bool
+
+    public function store($data): CreditCard
     {
-        $creditCard = CreditCard::create($data);
-
-        if ($creditCard) {
-            return true;
-        }
-
-        return false;
+        return CreditCard::create($data);
     }
 }

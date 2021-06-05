@@ -51,6 +51,5 @@ class CategorySeeder extends Seeder
                 'type' => $item['type']
             ]);
         }
-
     }
 }
