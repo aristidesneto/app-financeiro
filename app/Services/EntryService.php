@@ -23,20 +23,33 @@ class EntryService implements ServiceInterface
 
     public function entries(array $request): AnonymousResourceCollection
     {
-        $type = 'expense' === $request['type'] ? 'expense' : 'income';
-        $date = Carbon::createFromFormat('Y-m', $request['month'])->format('Y-m');
+        $type = $request['type'] === 'expense' ? 'expense' : 'income';
 
-        $year = explode('-', $date)[0];
-        $month = explode('-', $date)[1];
+        $isDateRange = (! is_null($request['period']['start']) && ! is_null($request['period']['end'])) ? true : false;
 
-        $query = Entry::with('user', 'bank_account', 'category', 'credit_card')
-                    ->where('type', $type)
-                    ->whereMonth('due_date', $month)
-                    ->whereYear('due_date', $year)
-                    ->orderBy('due_date')
-                    ->get();
+        $startDate = Carbon::createFromFormat('Y-m-d', $request['period']['start']);
 
-        return EntryResource::collection($query);
+        $query = Entry::with('bankAccount', 'category', 'creditCard')->where('type', $type);
+
+        if ($isDateRange) {
+            $endDate = Carbon::createFromFormat('Y-m-d', $request['period']['end']);
+
+            $query->where(function ($query) use ($startDate, $endDate) {
+                $query->whereMonth('due_date', '>=', $startDate)
+                    ->whereMonth('due_date', '<=', $endDate);
+            })
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->whereYear('due_date', '>=', $startDate)
+                    ->whereYear('due_date', '<=', $endDate);
+            });
+        }
+
+        if (! $isDateRange) {
+            $query->whereMonth('due_date', $startDate)
+                ->whereYear('due_date', $startDate);
+        }
+
+        return EntryResource::collection($query->orderBy('due_date')->get());
     }
 
     protected function getSequence(): int

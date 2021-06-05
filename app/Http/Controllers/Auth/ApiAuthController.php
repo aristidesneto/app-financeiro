@@ -18,11 +18,11 @@ class ApiAuthController extends Controller
     {
         $user = User::where('email', auth()->user()->email)->first();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['message' => 'Usuário não autenticado'], 401);
         }
 
-        return response()->json(new UserResource($user), 200);
+        return response()->json(['user' => new UserResource($user)], 200);
     }
 
     public function register(Request $request): JsonResponse
@@ -64,42 +64,32 @@ class ApiAuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user) {
-            if (Hash::check($request->password, $user->password)) {
-                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-
-                $cookie = $this->getCookieDetails($token);
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Login realizado com sucesso',
-                    'user' => new UserResource($user),
-                ], 200)
-                ->withCookie(
-                    $cookie['name'],
-                    $cookie['value'],
-                    $cookie['minutes'],
-                    $cookie['path'],
-                    $cookie['domain'],
-                    $cookie['secure']
-                );
-            }
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Credenciais informadas estão inválidas'], 401);
         }
 
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Credenciais informadas estão inválidas',
-        ], 401);
+        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+
+        $cookie = $this->getCookieDetails($token);
+
+        return response()->json(['user' => new UserResource($user)], 200)
+            ->withCookie(
+                $cookie['name'],
+                $cookie['value'],
+                $cookie['minutes'],
+                $cookie['path'],
+                $cookie['domain'],
+                $cookie['secure']
+            );
     }
 
     public function logout(Request $request): JsonResponse
     {
         $request->user()->token()->revoke();
+
         $cookie = Cookie::forget('_token');
 
-        return response()->json([
-            'message' => 'Logout realizado com sucesso',
-        ], 200)->withCookie($cookie);
+        return response()->json([], 200)->withCookie($cookie);
     }
 
     private function getCookieDetails(string $token): array

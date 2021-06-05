@@ -16,8 +16,8 @@ Route::middleware(['auth.api'])->group(function () {
     Route::get('authenticated/me', [ApiAuthController::class, 'me'])->name('me');
     Route::post('logout', [ApiAuthController::class, 'logout'])->name('logout.api');
 
-    Route::resource('entry', EntryController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('bank-account', BankAccountController::class);
-    Route::resource('credit-card', CreditCardController::class);
+    Route::apiResource('entries', EntryController::class);
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('bank-accounts', BankAccountController::class);
+    Route::apiResource('credit-cards', CreditCardController::class);
 });
