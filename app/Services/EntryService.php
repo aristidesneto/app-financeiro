@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Http\Resources\EntryResource;
 use Carbon\Carbon;
 use App\Models\Entry;
-use App\Models\CreditCard;
 
 class EntryService implements ServiceInterface
 {
@@ -19,12 +20,18 @@ class EntryService implements ServiceInterface
         return $this->saveIncome($data);
     }
 
-    public function getEntries(array $params)
+    public function entries(array $request)
     {
+        $type = $request['type'] === 'expense' ? 'expense' : 'income';
+        $date = Carbon::createFromFormat('Y-m', $request['month'])->format('Y-m');
+
+        $year = explode('-', $date)[0];
+        $month = explode('-', $date)[1];
+
         $query = Entry::with('user', 'bank_account', 'category', 'credit_card')
-                    ->where('type', $params['type'])
-                    ->whereMonth('due_date', $params['period']['month'])
-                    ->whereYear('due_date', $params['period']['year'])
+                    ->where('type', $type)
+                    ->whereMonth('due_date', $month)
+                    ->whereYear('due_date', $year)
                     ->orderBy('due_date')
                     ->get();
 
@@ -36,7 +43,7 @@ class EntryService implements ServiceInterface
         return Entry::max('sequence');
     }
 
-    protected function saveExpense(array $data) : bool
+    protected function saveExpense(array $data): bool
     {
         $data['is_recurring'] = isset($data['is_recurring']) == '1' ? true : false;
         $due_date = $data['due_date'] = Carbon::createFromTimeString($data['due_date']);
