@@ -2,31 +2,33 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\CreditCard;
 use Illuminate\Http\Request;
+use App\Services\CreditCardService;
+use App\Http\Controllers\Controller;
 
 class CreditCardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return CreditCard::where('status', true)->orderBy('name')->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $store = (new CreditCardService())->store($request->all());
+
+        if (! $store) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro para realizar o cadastro'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Cadastro realizado com sucesso'
+        ], 200);
     }
 
     /**

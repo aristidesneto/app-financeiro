@@ -4,15 +4,16 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BankAccountResource extends JsonResource
+class UserResource extends JsonResource
 {
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'user' => new UserResource($this->user_id),
+            // 'id' => $this->id,
+            'uuid' => $this->uuid,
             'name' => $this->name,
-            'balance' => $this->balance,
+            'email' => $this->email,
+            'status' => $this->status
         ];
     }
 }

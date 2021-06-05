@@ -9,37 +9,28 @@ use App\Http\Controllers\Controller;
 
 class EntryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $type = $request->type === 'expense' ? 'expense' : 'income';
+        $date = Carbon::createFromFormat('Y-m', $request->month)->format('Y-m');
 
         $params = [
             'type' => $type,
             'period' => [
-                'month' => explode('/', $request->month)[1],
-                'year' => explode('/', $request->month)[0]
+                'year' => explode('-', $date)[0],
+                'month' => explode('-', $date)[1]
             ]
         ];
         $entries = (new EntryService())->getEntries($params);
 
-        return response()->json([
-            'data' => $entries,
-            'totalExpense' => number_format($entries->where('credit_card_id', null)->sum('amount'), 2, ',', '.'),
-            'totalCard' => number_format($entries->where('credit_card_id', !null)->sum('amount'), 2, ',', '.')
-        ]);
+        return response()->json($entries);
+        // return response()->json([
+        //     'data' => $entries,
+        //     'total_expense' => $entries->where('credit_card_id', null)->sum('amount'),
+        //     'total_creditcard' => $entries->where('credit_card_id', !null)->sum('amount')
+        // ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $store = (new EntryService())->store($request->all());
@@ -57,35 +48,16 @@ class EntryController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

@@ -21,7 +21,7 @@ class EntryService implements ServiceInterface
 
     public function getEntries(array $params)
     {
-        $query = Entry::with('bank_account', 'category', 'credit_card')
+        $query = Entry::with('user', 'bank_account', 'category', 'credit_card')
                     ->where('type', $params['type'])
                     ->whereMonth('due_date', $params['period']['month'])
                     ->whereYear('due_date', $params['period']['year'])
@@ -39,8 +39,7 @@ class EntryService implements ServiceInterface
     protected function saveExpense(array $data) : bool
     {
         $data['is_recurring'] = isset($data['is_recurring']) == '1' ? true : false;
-        $data['amount'] = formatMoney2Db($data['amount']);
-        $due_date = $data['due_date'] = Carbon::createFromFormat('d/m/Y', $data['due_date']);
+        $due_date = $data['due_date'] = Carbon::createFromTimeString($data['due_date']);
 
         // Recorrente
         if ($data['is_recurring'] === true) {
@@ -61,11 +60,13 @@ class EntryService implements ServiceInterface
         // dd($data);
 
         // Cartão de crédito
-        if (!is_null($data['credit_card_id'])) {
+        if (! is_null($data['credit_card_id'])) {
             $totalParcel = ($data['parcel'] === null || $data['parcel'] === '0') ? '1' : $data['parcel'];
 
             $amountParcel = round($data['amount'] / $totalParcel, 2);
             $difference = round(($amountParcel * $totalParcel) - $data['amount'], 2);
+
+            // dd($amountParcel, $data['amount']);
 
             $data['total_parcel'] = $totalParcel;
             $data['bank_account_id'] = null;
@@ -73,7 +74,7 @@ class EntryService implements ServiceInterface
             for ($i = 1; $i <= $totalParcel; $i++) {
                 $data['parcel'] = $i;
                 $data['amount'] = $i === (int) $totalParcel ? $amountParcel - $difference : $amountParcel;
-
+                // dd($data);
                 Entry::create($data);
 
                 $data['due_date'] = $due_date->copy()->addMonthNoOverflow($i);
@@ -85,22 +86,6 @@ class EntryService implements ServiceInterface
         $data['bank_account_id'] = null;
         $data['credit_card_id'] = null;
         $data['parcel'] = '0';
-
-
-        // Cartão de crédito
-        // if ($data['type_payment'] === 'credit-card') {
-
-        // } else if ($data['type_payment'] === 'bank-account') {
-        //     $due_date = Carbon::createFromFormat('d/m/Y', $data['due_date']);
-        //     $data['bank_account_id'] = $data['payment'];
-        // } else {
-        //     $due_date = Carbon::createFromFormat('d/m/Y', $data['due_date']);
-        // }
-
-        // $data['due_date'] = $due_date ?? Carbon::createFromFormat('d/m/Y', $data['due_date']);
-        // $data['payday'] = isset($data['payday']) ? Carbon::createFromFormat('d/m/Y', $data['payday']) : null;
-        // $data['parcel'] = $data['parcel'] ?? 1;
-
 
         // Cria para 1 parcela
         Entry::create($data);

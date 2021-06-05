@@ -1,12 +1,12 @@
 <table class="table table-hover table-striped table-sm expenseTable">
     <thead>
         <tr>
-        <th>ID</th>
-        <th>Categoria</th>
-        <th>Descrição</th>
-        <th>Data Vencimento</th>
-        <th>Pagamento</th>
-        <th>Valor</th>
+            <th>ID</th>
+            <th>Categoria</th>
+            <th>Descrição</th>
+            <th>Data Vencimento</th>
+            <th>Pagamento</th>
+            <th>Valor</th>
         </tr>
     </thead>
     <tbody id="expenseData">

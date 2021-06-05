@@ -2,12 +2,22 @@
 
 namespace App\Services;
 
-class CreditCard implements ServiceInterface
+use App\Models\CreditCard;
+
+class CreditCardService implements ServiceInterface
 {
+    public function list()
+    {
+        return CreditCard::orderBy('name')->get();
+    }
     public function store($data) : bool
     {
-        # code...
+        $creditCard = CreditCard::create($data);
+
+        if ($creditCard) {
+            return true;
+        }
+
+        return false;
     }
-
-
 }

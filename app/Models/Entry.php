@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Tenant\Traits\TenantTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Entry extends Model
 {
@@ -31,5 +32,15 @@ class Entry extends Model
     public function credit_card()
     {
         return $this->belongsTo(CreditCard::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = formatMoney2Db($value);
     }
 }
