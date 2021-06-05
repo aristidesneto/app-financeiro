@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Http\Resources\EntryResource;
 use App\Models\Entry;
 use Carbon\Carbon;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class EntryService implements ServiceInterface
 {
@@ -19,7 +20,7 @@ class EntryService implements ServiceInterface
         return $this->saveIncome($data);
     }
 
-    public function entries(array $request)
+    public function entries(array $request): AnonymousResourceCollection
     {
         $type = 'expense' === $request['type'] ? 'expense' : 'income';
         $date = Carbon::createFromFormat('Y-m', $request['month'])->format('Y-m');
@@ -37,7 +38,7 @@ class EntryService implements ServiceInterface
         return EntryResource::collection($query);
     }
 
-    protected function getSequence()
+    protected function getSequence(): int
     {
         return Entry::max('sequence');
     }
@@ -50,7 +51,7 @@ class EntryService implements ServiceInterface
         // Recorrente
         if (true === $data['is_recurring']) {
             $sequence = $this->getSequence();
-            $data['sequence'] = null === $sequence ? 1 : $sequence + 1;
+            $data['sequence'] = $sequence ? 1 : $sequence + 1;
             $data['bank_account_id'] = null;
             $data['credit_card_id'] = null;
             $data['parcel'] = 0;

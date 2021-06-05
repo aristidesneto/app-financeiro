@@ -4,8 +4,69 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a600a7b6d39aedb764f7facee34ea8d1",
+    "content-hash": "16268bb8b7711ab3a5edb3cf8cdd1c8d",
     "packages": [
+        {
+            "name": "aristidesneto/helpers",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aristidesneto/helpers.git",
+                "reference": "90287d508cdea30e9da5ded4102ce87490ae3e76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aristidesneto/helpers/zipball/90287d508cdea30e9da5ded4102ce87490ae3e76",
+                "reference": "90287d508cdea30e9da5ded4102ce87490ae3e76",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "phpunit/phpunit": "^9.5",
+                "spatie/ray": "^1.10",
+                "vimeo/psalm": "^4.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Aristides\\Helpers\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aristides Neto",
+                    "email": "aristidesbneto@gmail.com"
+                }
+            ],
+            "description": "Helpers and validations classes",
+            "homepage": "https://github.com/aristidesneto/helpers",
+            "keywords": [
+                "helpers",
+                "validations"
+            ],
+            "support": {
+                "issues": "https://github.com/aristidesneto/helpers/issues",
+                "source": "https://github.com/aristidesneto/helpers/tree/v0.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://aristides.dev",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/aristidesneto",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-03-18T02:06:57+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.0.3",

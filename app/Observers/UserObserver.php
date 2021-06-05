@@ -7,7 +7,7 @@ use Ramsey\Uuid\Uuid;
 
 class UserObserver
 {
-    public function creating(User $user)
+    public function creating(User $user): void
     {
         $user->uuid = Uuid::uuid4();
     }

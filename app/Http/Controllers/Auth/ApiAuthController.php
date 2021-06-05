@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +14,7 @@ use Illuminate\Support\Str;
 
 class ApiAuthController extends Controller
 {
-    public function me()
+    public function me(): JsonResponse
     {
         $user = User::where('email', auth()->user()->email)->first();
 
@@ -21,12 +22,10 @@ class ApiAuthController extends Controller
             return response()->json(['message' => 'Usuário não autenticado'], 401);
         }
 
-        return response()->json([
-            'user' => new UserResource($user),
-        ], 200);
+        return response()->json(new UserResource($user), 200);
     }
 
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -35,7 +34,7 @@ class ApiAuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response([
+            return response()->json([
                 'errors' => $validator->errors()->all(),
             ], 422);
         }
@@ -50,7 +49,7 @@ class ApiAuthController extends Controller
         ], 200);
     }
 
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
@@ -93,7 +92,7 @@ class ApiAuthController extends Controller
         ], 401);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->token()->revoke();
         $cookie = Cookie::forget('_token');
@@ -103,7 +102,7 @@ class ApiAuthController extends Controller
         ], 200)->withCookie($cookie);
     }
 
-    private function getCookieDetails($token)
+    private function getCookieDetails(string $token): array
     {
         return [
             'name' => '_token',

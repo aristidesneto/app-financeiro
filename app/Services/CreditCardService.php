@@ -14,7 +14,7 @@ class CreditCardService implements ServiceInterface
         return CreditCard::orderBy('name')->get();
     }
 
-    public function store($data): CreditCard
+    public function store(array $data): CreditCard
     {
         return CreditCard::create($data);
     }

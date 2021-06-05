@@ -7,7 +7,7 @@ parameters:
         - app
 
     # The level 8 is the highest level
-    level: 5
+    level: 6
 
     ignoreErrors:
         - '#Method Carbon\\Carbon::addMonthNoOverflow\(\) invoked with 1 parameter, 0 required#'

@@ -12,10 +12,15 @@ class CreditCard extends Model
     use TenantTrait;
 
     protected $fillable = [
-        'user_id', 'name', 'number', 'best_date', 'due_date', 'limit',
+        'user_id',
+        'name',
+        'number',
+        'best_date',
+        'due_date',
+        'limit',
     ];
 
-    public function setLimitAttribute($value)
+    public function setLimitAttribute(string $value): void
     {
         $this->attributes['limit'] = formatMoney2Db($value);
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Tenant\Traits\TenantTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
@@ -12,10 +13,13 @@ class Category extends Model
     use TenantTrait;
 
     protected $fillable = [
-        'user_id', 'name', 'description', 'color',
+        'user_id',
+        'name',
+        'description',
+        'color',
     ];
 
-    public function entries()
+    public function entries(): HasMany
     {
         return $this->hasMany(Entry::class);
     }
