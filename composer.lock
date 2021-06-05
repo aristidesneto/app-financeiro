@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16268bb8b7711ab3a5edb3cf8cdd1c8d",
+    "content-hash": "568a93d9d3cd5cfe7599eb9e4b0147fe",
     "packages": [
         {
             "name": "aristidesneto/helpers",
-            "version": "v0.2.0",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aristidesneto/helpers.git",
-                "reference": "90287d508cdea30e9da5ded4102ce87490ae3e76"
+                "reference": "49d53fe4e6559ea247b7f479b72c4d5f5932dc04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aristidesneto/helpers/zipball/90287d508cdea30e9da5ded4102ce87490ae3e76",
-                "reference": "90287d508cdea30e9da5ded4102ce87490ae3e76",
+                "url": "https://api.github.com/repos/aristidesneto/helpers/zipball/49d53fe4e6559ea247b7f479b72c4d5f5932dc04",
+                "reference": "49d53fe4e6559ea247b7f479b72c4d5f5932dc04",
                 "shasum": ""
             },
             "require": {
@@ -25,9 +25,7 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.17",
-                "phpunit/phpunit": "^9.5",
-                "spatie/ray": "^1.10",
-                "vimeo/psalm": "^4.3"
+                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
             "autoload": {
@@ -53,7 +51,7 @@
             ],
             "support": {
                 "issues": "https://github.com/aristidesneto/helpers/issues",
-                "source": "https://github.com/aristidesneto/helpers/tree/v0.2.0"
+                "source": "https://github.com/aristidesneto/helpers/tree/v1.0.0"
             },
             "funding": [
                 {
@@ -65,7 +63,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-18T02:06:57+00:00"
+            "time": "2021-06-05T18:41:59+00:00"
         },
         {
             "name": "asm89/stack-cors",

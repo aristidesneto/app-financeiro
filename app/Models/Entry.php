@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Tenant\Traits\TenantTrait;
+use Aristides\Helpers\Helpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -56,6 +57,6 @@ class Entry extends Model
 
     public function setAmountAttribute(string $value): void
     {
-        $this->attributes['amount'] = formatMoney2Db($value);
+        $this->attributes['amount'] = Helpers::formatMoneyToDatabase($value);
     }
 }

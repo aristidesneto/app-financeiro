@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Http\Resources\EntryResource;
 use App\Models\Entry;
+use Aristides\Helpers\Helpers;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -103,7 +104,7 @@ class EntryService implements ServiceInterface
     protected function saveIncome(array $data): bool
     {
         $data['is_recurring'] = '1' == isset($data['is_recurring']) ? true : false;
-        $data['amount'] = formatMoney2Db($data['amount']);
+        $data['amount'] = Helpers::formatMoneyToDatabase($data['amount']);
         $start_date = $data['start_date'] = Carbon::createFromFormat('m/Y', $data['start_date'])->firstOfMonth();
         $data['parcel'] = 0;
 
