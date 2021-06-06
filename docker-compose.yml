@@ -1,28 +1,19 @@
-# For more information: https://laravel.com/docs/sail
+# For more information: https://laravel.com/docs/api
 version: '3'
 services:
+
   app:
-    build:
-      context: ./vendor/laravel/sail/runtimes/8.0
-      dockerfile: Dockerfile
-      args:
-        WWWGROUP: '1000'
-    image: aristides-financeiro/app
+    image: aristidesbneto/php7.4
+    container_name: app
     ports:
       - '8080:80'
-    environment:
-      WWWUSER: '1000'
-      LARAVEL_SAIL: 1
     volumes:
-      - '.:/var/www/html'
+      - .:/var/www/html
     networks:
-      - sail
-    depends_on:
-      - mysql
-      - redis
+      - api
 
   mysql:
-    image: 'mysql:5.7'
+    image: mysql:5.7
     ports:
       - '3309:3306'
     environment:
@@ -34,27 +25,8 @@ services:
     volumes:
       - './docker/mysql/data:/var/lib/mysql'
     networks:
-      - sail
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping"]
-
-  redis:
-    image: 'redis:alpine'
-    ports:
-      - '${FORWARD_REDIS_PORT:-6379}:6379'
-    volumes:
-      - 'financeiro-redis:/data'
-    networks:
-      - sail
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      - api
 
 networks:
-  sail:
+  api:
     driver: bridge
-
-volumes:
-  financeiro-mysql:
-    driver: local
-  financeiro-redis:
-    driver: local
